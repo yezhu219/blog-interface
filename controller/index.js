@@ -18,7 +18,6 @@ module.exports = {
         list
       }
     } catch (e) {
-      //handle error
       ctx.body = { error: 1, msg: e }
     }
   },
@@ -33,8 +32,7 @@ module.exports = {
         data
       }
     } catch (e) {
-      //handle error
-      ctx.body = { error: 1, msg: e }
+      ctx.body = { error: 1, data:{msg: e} }
     }
   },
 
@@ -44,7 +42,6 @@ module.exports = {
       let code= 100
       let data = ctx.request.body
       let token = ''
-      // let aa = new userModel(data)
       let res = await userModel.findOne({ userName: data.userName })
       if (res.password == data.password) {
         let id = res._id.toString()
@@ -61,8 +58,7 @@ module.exports = {
         }
       }
     } catch (e) {
-      //handle error
-      ctx.body = { error: 1, msg: e }
+      ctx.body = { error: 1, data: { msg: e } }
     }
   },
   async register(ctx) {
@@ -75,7 +71,7 @@ module.exports = {
       
     } catch (e) {
       //handle error
-      ctx.body = { error: 1, msg: e }
+      ctx.body = { error: 1, data: { msg: e } }
     }
   }
 }
