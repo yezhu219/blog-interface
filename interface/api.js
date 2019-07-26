@@ -9,6 +9,8 @@ const router = new Router({
 router.get('/articleList', api.articleList)
 // 文章详情
 router.get('/detail',api.articleDetail)
-router.post('/test',api.test)
-
+// 登录
+router.post('/login',api.login)
+// 注册
+router.post('/register',api.register)
 exports.router =router
