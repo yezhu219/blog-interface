@@ -2,6 +2,7 @@ const articleListModel = require('../schema/articleList')
 const articleDetialModel = require('../schema/articleDetail')
 const userModel = require('../schema/user')
 const mongoose = require('mongoose')
+const jwt = require('../lib/jwt')
 
 const md = require('markdown').markdown
 
@@ -42,16 +43,22 @@ module.exports = {
       let reply = '用户名或密码错误'
       let code= 100
       let data = ctx.request.body
+      let token = ''
       // let aa = new userModel(data)
       let res = await userModel.findOne({ userName: data.userName })
-      console.log(res,'----')
       if (res.password == data.password) {
+        let id = res._id.toString()
+        let jwtModel = new jwt(id)
+        token= jwtModel.generateToken()
         code = 200
         reply = 'sucess'
       } 
       ctx.body = {
         code,
-        data:reply
+        data: {
+          msg: reply,
+          token
+        }
       }
     } catch (e) {
       //handle error
