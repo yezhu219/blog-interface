@@ -3,6 +3,7 @@ const articleDetialModel = require('../schema/articleDetail')
 const userModel = require('../schema/user')
 const mongoose = require('mongoose')
 const jwt = require('../lib/jwt')
+const md5 = require('md5')
 
 const md = require('markdown').markdown
 
@@ -46,7 +47,7 @@ module.exports = {
       if (res.password == data.password) {
         let id = res._id.toString()
         let jwtModel = new jwt(id)
-        token= jwtModel.generateToken()
+        token = jwtModel.generateToken()
         code = 200
         reply = 'sucess'
       } 
@@ -70,7 +71,6 @@ module.exports = {
       })
       
     } catch (e) {
-      //handle error
       ctx.body = { error: 1, data: { msg: e } }
     }
   }
