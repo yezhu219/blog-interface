@@ -65,13 +65,44 @@ module.exports = {
   async register(ctx) {
     try {
       let data = ctx.request.body
-      userModel.create(data, function (err, doc) {
+      userModel.create({userName:data.uName,password:data.pwd}, function (err, doc) {
         if (err) console.log(err)
         console.log('保存成功')
       })
-      
+      ctx.body = {
+        code: 200,
+        data: {
+          msg: 'sucess',
+          
+        }
+      }
     } catch (e) {
       ctx.body = { error: 1, data: { msg: e } }
     }
+  },
+  //检查用户名是否被注册
+  async checkUserName(ctx) {
+    try {
+      let { userName } = ctx.request.body
+      let res = await userModel.findOne({userName})
+      if (res) {
+        ctx.body = {
+          code: 200,
+          data: null
+        }
+      } else {
+        ctx.body = {
+          code: 200,
+          data: {
+            msg:'sucess'
+          }
+        }
+      }
+      
+    } catch (e) {
+      ctx.body = { error: 1, data: { msg: e } }
+      
+    }
+
   }
 }
