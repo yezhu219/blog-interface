@@ -16,7 +16,7 @@ mongoose.Promise = global.Promise
 const handleUnusual = (max) => {
   max++
   if (max <= 3) {
-    mongoose.connect(db)
+    mongoose.connect(db,config)
   } else {
     console.log('链接失败')
   }

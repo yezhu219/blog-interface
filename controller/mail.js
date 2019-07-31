@@ -49,7 +49,24 @@ module.exports = {
     }
   },
   
-  async checkAuthCode() {
-    
+  async checkAuthCode(ctx) {
+    try {
+      const { email, authCode } = ctx.request.body
+      let res = await authCodeModel.findOne({ email })
+      if (res.authCode == authCode) {
+        ctx.body = {
+          code: 200,
+          data: {
+            msg:'sucess'
+          }
+        }
+      }
+      ctx.body = {
+        code: 200,
+        data:null
+      }
+    } catch (e) {
+      ctx.body = { error: 1, data: { msg: e } }
+    }
   }
 }
