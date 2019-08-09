@@ -59,7 +59,8 @@ module.exports = {
         }
       }
     } catch (e) {
-      ctx.body = { error: 1, data: { msg: e } }
+      console.log(e)
+      ctx.body = { error: 1, data: { msg: '登录失败' } }
     }
   },
   async register(ctx) {
