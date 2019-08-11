@@ -21,6 +21,10 @@ const sfHotDaySchema = new mongoose.Schema({
   view: {
     type: Number,
     default: 0
+  },
+  tag: {
+    type: Array,
+    defalut:['js']
   }
 })
 

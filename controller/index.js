@@ -12,9 +12,10 @@ module.exports = {
     try {
       let req = ctx.request.query;
       let list = await articleListModel.find({}).skip(1).limit(10).sort({ '_id': -1 })
+      console.log(list,222)
       let frontCount = await articleListModel.count({});
       ctx.body = {
-        error: 0,
+        code: 200,
         count: frontCount,
         list
       }
