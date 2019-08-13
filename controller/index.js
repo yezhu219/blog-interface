@@ -26,8 +26,11 @@ module.exports = {
   async articleDetail(ctx) {
     try {
       let req = ctx.request.query
-      let id = mongoose.Types.ObjectId(req.id)
+      // let id = mongoose.Types.ObjectId(req.id)
+      let id = req._id
+      console.log(id,1)
       let data = await articleListModel.findOne({ "_id": id })
+      console.log(data,2)
       data.content=md.toHTML(data.content)
       ctx.body = {
         code: 200,
