@@ -119,6 +119,50 @@ max: Date
 
 ### 2.11 用户注册接口
 
+## 开启静态服务
+
+ 1. 安装 `koa-static`
+
+ 2. `app.use(staticFiles(path.join(__dirname, './public')))`,访问图片时不用加上 v1前缀及public路径
+
+
+##  图片上传逻辑处理
+
+### 1. koa-bodyparser 不能处理文件上传，使用koa-multer进行处理
+
+```js
+//文件上传
+//配置
+var storage = multer.diskStorage({
+  //文件保存路径
+  destination: function (req, file, cb) {
+    cb(null, 'public/img/')
+  },
+  //修改文件名称
+  filename: function (req, file, cb) {
+    var fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+    cb(null, Date.now() + "." + fileFormat[fileFormat.length - 1]);
+  }
+})
+//加载配置
+var upload = multer({ storage: storage });
+
+//路由处理可以放在路由处理模块
+//路由
+// router.post('/upLoadImg', upload.single('img'), async (ctx, next) => {
+//   ctx.body = {
+//     code: 200,
+//     data: {
+//       url: ctx.req.file.filename,
+//       msg: 'sucess',
+
+//     }
+//   }
+// })
+
+```
+
+> 需要先建好public/img 文件夹，否则会报错
 
 ## 状态码 
 1. 0 失败

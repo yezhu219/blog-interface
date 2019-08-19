@@ -4,6 +4,7 @@ const userModel = require('../schema/user')
 const mongoose = require('mongoose')
 const jwt = require('../lib/jwt')
 const md5 = require('md5')
+const fs = require('fs')
 
 const md = require('markdown').markdown
 
@@ -109,5 +110,17 @@ module.exports = {
       
     }
 
-  }
+  },
+  //图片上传
+  async upLoadImg(ctx) {
+  
+    ctx.body = {
+      code: 200,
+      data: {
+        url:'http://127.0.0.1:3001/img/'+ ctx.req.file.filename,
+        msg: 'sucess',
+
+      }
+    }
+  } 
 }
