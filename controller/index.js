@@ -122,5 +122,33 @@ module.exports = {
 
       }
     }
-  } 
+  },
+  async updateArticle(ctx) {
+    try {
+      let { article } = ctx.request.body
+      console.log(article,'+++++++')
+      let res = await articleListModel.findOneAndUpdate({ _id: article._id }, article)
+      console.log(res,'--------')
+      if (res) {
+        ctx.body = {
+          code: 200,
+          data: {
+            msg:'success'
+          }
+        }
+      } else {
+        ctx.body = {
+          code: 200,
+          data: {
+            msg: 'sucess'
+          }
+        }
+      }
+
+    } catch (e) {
+      ctx.body = { error: 1, data: { msg: e } }
+
+    }
+
+  },
 }

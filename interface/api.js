@@ -48,5 +48,7 @@ router.post('/authCode', email.authCode)
 //验证验证码
 router.post('/checkAuthCode', email.checkAuthCode)
 //图片上传
-router.post('/upLoadImg', upload.single('img'),api.upLoadImg)
+router.post('/upLoadImg', upload.single('img'), api.upLoadImg)
+//编辑文章
+router.post('/updateArticle', api.updateArticle)
 exports.router =router
