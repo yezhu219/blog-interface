@@ -51,4 +51,12 @@ router.post('/checkAuthCode', email.checkAuthCode)
 router.post('/upLoadImg', upload.single('img'), api.upLoadImg)
 //编辑文章
 router.post('/updateArticle', api.updateArticle)
+//文章搜索
+router.get('/search', api.search)
+//获取分类
+router.get('/getClassify', api.getClassify)
+//添加分类
+router.post('/addClassify', api.addClassify)
+//删除分类
+router.post('/delClassify', api.delClassify)
 exports.router =router

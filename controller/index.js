@@ -1,6 +1,7 @@
 const articleListModel = require('../schema/articleList')
 const articleDetialModel = require('../schema/articleDetail')
 const userModel = require('../schema/user')
+const tagModel = require('../schema/tag')
 const mongoose = require('mongoose')
 const jwt = require('../lib/jwt')
 const md5 = require('md5')
@@ -11,14 +12,19 @@ const md = require('markdown').markdown
 module.exports = {
   async articleList(ctx) {
     try {
-      let req = ctx.request.query;
-      let list = await articleListModel.find({}).skip(1).limit(10).sort({ '_id': -1 })
-      console.log(list,222)
+      let { pageSize = 10, pageNumber = 1 } = ctx.request.query
+      console.log(pageSize,pageNumber,'------------')
+      // let req = ctx.request.query;
+      // let pageNumber = req.pageNumber/1 || 1
+      // let pageSize = req.pageSize/1 || 10
+      let list = await articleListModel.find({}).skip((pageNumber-1)*(pageSize/1)).limit(pageSize/1).sort({ '_id': -1 })
       let frontCount = await articleListModel.count({});
       ctx.body = {
         code: 200,
         count: frontCount,
-        list
+        list,
+        pageSize,
+        pageNumber
       }
     } catch (e) {
       ctx.body = { error: 1, msg: e }
@@ -126,7 +132,6 @@ module.exports = {
   async updateArticle(ctx) {
     try {
       let { article } = ctx.request.body
-      console.log(article,'+++++++')
       let res = await articleListModel.findOneAndUpdate({ _id: article._id }, article)
       console.log(res,'--------')
       if (res) {
@@ -140,15 +145,64 @@ module.exports = {
         ctx.body = {
           code: 200,
           data: {
-            msg: 'sucess'
+            msg: 'faile'
           }
         }
       }
-
     } catch (e) {
       ctx.body = { error: 1, data: { msg: e } }
 
     }
 
+  },
+  async search(ctx) {
+    try {
+      let  keyWrod  = ctx.request.query
+      const reg = new RegExp(keyWrod, 'i') 
+      let res = await articleListModel.find().or(
+        [{ title: { $regex: reg } },
+          { author: { $regex: reg } },
+          { content: { $regex: reg } },
+          { des: { $regex: reg } }
+        ])
+      ctx.body = {
+        code: 200,
+        data: {
+          data: res
+        }
+      }
+      
+    } catch (e) {
+      ctx.body = { error: 1, data: { msg: e } }
+    }
+
+  },
+  async getClassify(ctx){
+    let data = await tagModel.find({})
+    ctx.body = {
+      code: 200,
+      data: {
+        data
+      }
+    }
+  },
+  async addClassify(ctx) {
+    let tag = ctx.request.body
+    let msg = 'failed'
+    let isNew = await tagModel.find({ name: tag.name })
+    if (isNew.length == 0) {
+      let res = await tagModel.create(tag)
+      console.log(res, 999)
+      msg = 'success'
+    }
+    ctx.body = {
+      code: 200,
+      data: {
+        data: msg
+      }
+    }
+  },
+  async delClassify(ctx) {
+    let data = ctx.request.body
   },
 }
