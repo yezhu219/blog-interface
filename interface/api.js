@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const api = require('../controller/index')
 const email = require('../controller/mail')
+const tag = require('../controller/tag')
 const multer = require('koa-multer')
 //文件上传
 //配置
@@ -54,9 +55,11 @@ router.post('/updateArticle', api.updateArticle)
 //文章搜索
 router.get('/search', api.search)
 //获取分类
-router.get('/getClassify', api.getClassify)
+router.get('/getClassify', tag.getClassify)
 //添加分类
-router.post('/addClassify', api.addClassify)
+router.post('/addClassify', tag.addClassify)
 //删除分类
-router.post('/delClassify', api.delClassify)
+router.post('/delClassify', tag.delClassify)
+// 编辑分类
+router.post('/editeClassify', tag.editeClassify)
 exports.router =router

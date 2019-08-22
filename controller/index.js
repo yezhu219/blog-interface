@@ -1,7 +1,7 @@
 const articleListModel = require('../schema/articleList')
 const articleDetialModel = require('../schema/articleDetail')
 const userModel = require('../schema/user')
-const tagModel = require('../schema/tag')
+
 const mongoose = require('mongoose')
 const jwt = require('../lib/jwt')
 const md5 = require('md5')
@@ -192,7 +192,6 @@ module.exports = {
     let isNew = await tagModel.find({ name: tag.name })
     if (isNew.length == 0) {
       let res = await tagModel.create(tag)
-      console.log(res, 999)
       msg = 'success'
     }
     ctx.body = {

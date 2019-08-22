@@ -8,7 +8,9 @@ const staticFiles  = require('koa-static')
 const app = new Koa()
 
 app.use(cors())
-app.use(bodyparser())
+app.use(bodyparser({
+  formLimit:'5mb' //默认56kb,表单数据大时会报413
+}))
 app.use(staticFiles(path.join(__dirname, './public')))
 
   

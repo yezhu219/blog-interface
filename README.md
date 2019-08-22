@@ -164,6 +164,14 @@ var upload = multer({ storage: storage });
 
 > 需要先建好public/img 文件夹，否则会报错
 
+
+
+### 2. 前端报413，请求参数过大
+    
+>  `app.use(bodyparser({`
+  `formLimit:'5mb' //默认56kb,表单数据大时会报413`
+`}))`
+
 ## 状态码 
 1. 0 失败
 2. 1 成功
