@@ -52,6 +52,10 @@ router.post('/checkAuthCode', email.checkAuthCode)
 router.post('/upLoadImg', upload.single('img'), api.upLoadImg)
 //编辑文章
 router.post('/updateArticle', api.updateArticle)
+// 删除多个文章
+router.post('/delArticleMany', api.delArticleMany)
+// 删除单个文章
+router.post('/delArticleOne', api.delArticleOne)
 //文章搜索
 router.get('/search', api.search)
 //获取分类

@@ -25,6 +25,10 @@ const sfHotDaySchema = new mongoose.Schema({
   tag: {
     type: Array,
     defalut:['js']
+  },
+  isDel: {
+    type: Boolean,
+    default: false
   }
 })
 

@@ -13,10 +13,6 @@ module.exports = {
   async articleList(ctx) {
     try {
       let { pageSize = 10, pageNumber = 1 } = ctx.request.query
-      console.log(pageSize,pageNumber,'------------')
-      // let req = ctx.request.query;
-      // let pageNumber = req.pageNumber/1 || 1
-      // let pageSize = req.pageSize/1 || 10
       let list = await articleListModel.find({}).skip((pageNumber-1)*(pageSize/1)).limit(pageSize/1).sort({ '_id': -1 })
       let frontCount = await articleListModel.count({});
       ctx.body = {
@@ -33,11 +29,8 @@ module.exports = {
   async articleDetail(ctx) {
     try {
       let req = ctx.request.query
-      // let id = mongoose.Types.ObjectId(req.id)
-      let id = req._id
-      console.log(id,1)
-      let data = await articleListModel.findOne({ "_id": id })
-      console.log(data,2)
+      console.log(JSON.stringify(req),'req')
+      let data = await articleListModel.findOne({ "_id": req.id })
       data.content=md.toHTML(data.content)
       ctx.body = {
         code: 200,
@@ -79,7 +72,6 @@ module.exports = {
       let data = ctx.request.body
       userModel.create({userName:data.uName,password:data.pwd}, function (err, doc) {
         if (err) console.log(err)
-        console.log('保存成功')
       })
       ctx.body = {
         code: 200,
@@ -133,7 +125,6 @@ module.exports = {
     try {
       let { article } = ctx.request.body
       let res = await articleListModel.findOneAndUpdate({ _id: article._id }, article)
-      console.log(res,'--------')
       if (res) {
         ctx.body = {
           code: 200,
@@ -157,14 +148,16 @@ module.exports = {
   },
   async search(ctx) {
     try {
-      let  keyWrod  = ctx.request.query
+      let { keyWrod } = ctx.request.query
+      console.log(keyWrod,6666)
       const reg = new RegExp(keyWrod, 'i') 
-      let res = await articleListModel.find().or(
+      let res = await articleListModel.find({}).or(
         [{ title: { $regex: reg } },
           { author: { $regex: reg } },
           { content: { $regex: reg } },
           { des: { $regex: reg } }
         ])
+      console.log(res,11111)
       ctx.body = {
         code: 200,
         data: {
@@ -173,6 +166,7 @@ module.exports = {
       }
       
     } catch (e) {
+      console.log(e,3333)
       ctx.body = { error: 1, data: { msg: e } }
     }
 
@@ -203,5 +197,32 @@ module.exports = {
   },
   async delClassify(ctx) {
     let data = ctx.request.body
+  },
+  async delArticleMany(ctx) {
+    let data = ctx.request.body
+    let msg = 'failed'
+     await articleListModel.updateMany({ _id: { $in: data.ids } }, { isDel: true }).then((res, err) => {
+      if (!err) {
+         msg = 'success'
+      }
+    })
+    ctx.body = {
+      code: 200,
+      data: {
+        data:msg
+      }
+    }
+    
+  },
+  async delArticleOne(ctx) {
+    let data = ctx.request.body
+    let msg = 'success'
+    let res = await articleListModel.findOneAndUpdate({ _id: data._id }, { isDel: true })
+    ctx.body = {
+      code: 200,
+      data: {
+        data: msg
+      }
+    }
   },
 }
